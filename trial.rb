@@ -3,55 +3,66 @@ require 'pry'
 
 puts "the application is running"
 
+input_beginning = "5 5 1 2 S MMMMMMM 3 3 E MMRMMRMRRM"
+
+
+
 def moving_rover1
-  input = "5 5 1 2 S MMMMMMM"
+  input = "5 5 1 2 S MMMMMMM 3 3 E MMRMMRMRRM"
   input_splitted = input.split(' ')
+
   rover1_startingD = input_splitted[4]
-  array_of_commands = []
+  rover2_startingD = input_splitted[8]
+
+  array_of_commands1 = []
+  array_of_commands2 = []
 
   rover1_commands = input_splitted[5]
-  array_of_commands = rover1_commands.split('')
+  rover2_commands = input_splitted[6]
+
+  array_of_commands1 = rover1_commands.split('')
+  array_of_commands2 = rover2_commands.split('')
+
+
   directions = ["N","E","S","W"]
 
   index_direction_rover1 = directions.index(rover1_startingD.to_s)
-  output = newdirection_rover1(array_of_commands, input, index_direction_rover1)
+  index_direction_rover2 = directions.index(rover2_startingD.to_s)
+
+  output = newdirection_rover1(array_of_commands1, array_of_commands2, input, index_direction_rover1, index_direction_rover2)
 
 end
 
-#PSEUDOCODE
-
-#0 define program running method
-#0.1 it will be like : set grid - position rover 1 / 2
-#                               - move rover 1 (check if move is possible)
-#                               - move rover 2 (check if move is possible)
-#                               - save new positions - start again
-
-#1 define the method to move the rovers
-  #1.1 separate the different rovers since the second moves second
 
 
 
 
-  def newdirection_rover1(set_of_directions, input, index_dire_rover1)
+  def newdirection_rover1(set_of_directions1, set_of_directions2, input, index_dire_rover1, index_dire_rover2)
 
-    #expected output = "1 3 N"
     input_splitted = input.split(' ')
+
     gridX = input_splitted[0].to_i
     gridY = input_splitted[1].to_i
+
     rover1_startingX = input_splitted[2].to_i
     rover1_startingY = input_splitted[3].to_i
 
-  # #rover1
+    rover2_startingX = input_splitted[2].to_i
+    rover2_startingY = input_splitted[3].to_i
+
 
   rover1_startingD = input_splitted[4].to_s
+  rover2_startingD = input_splitted[8].to_s
 
+  k = 0
 
-
-
-  set_of_directions.each do |move|
+  set_of_directions1.each do |move|
 
     if move == "R"
       index_dire_rover1 == 3 ? index_dire_rover1 = 0 : index_dire_rover1 = index_dire_rover1 + 1
+      rover2_startingX = newdirection_rover_2(set_of_directions2, index_dire_rover1, rover2_startingX, rover2_startingY, gridX, gridY, k)
+      k += 1
+
     elsif move == "L"
       index_dire_rover1 == 0 ? index_dire_rover1 = 3 : index_dire_rover1 = index_dire_rover1 - 1
 
@@ -59,7 +70,7 @@ end
       if index_dire_rover1.odd?
 
       rover1_startingX = move_it_x(index_dire_rover1, rover1_startingX, gridX)
-
+      #rover2_startingX = move_to_x_rover_2(set_of_directions2, index_dire_rover1, rover2_startingX, rover2_startingY, gridX, gridY)
     else
       rover1_startingY = move_it_y(index_dire_rover1, rover1_startingY, gridY)
     end
@@ -68,6 +79,9 @@ end
 end
   puts rover1_startingX
   puts rover1_startingY
+
+  puts rover2_startingX
+  puts rover2_startingY
 end
 
 def move_it_x(index_dir_rover1, rover1_startingX, gridX)
@@ -107,6 +121,29 @@ def move_it_y(index_dir_rover1, rover1_startingY, gridY)
   end
 
 end
+
+def newdirection_rover_2(set_of_directions2, index_dire_rover2, rover2_startingX, rover2_startingY, gridX, gridY, k)
+
+        if set_of_directions2[k] == "R"
+      index_dire_rover1 == 3 ? index_dire_rover2 = 0 : index_dire_rover2 = index_dire_rover2 + 1
+      rover2_startingX = newdirection_rover_2(set_of_directions2, index_dire_rover2, rover2_startingX, rover2_startingY, gridX, gridY, k)
+      k += 1
+
+    elsif set_of_directions2[k] == "L"
+      index_dire_rover2 == 0 ? index_dire_rover2 = 3 : index_dire_rover2 = index_dire_rover2 - 1
+
+    else set_of_directions2[k] == "M"
+      if index_dire_rover2.odd?
+
+      rover2_startingX = move_it_x(index_dire_rover2, rover2_startingX, gridX)
+      #rover2_startingX = move_to_x_rover_2(set_of_directions2, index_dire_rover2, rover2_startingX, rover2_startingY, gridX, gridY)
+    else
+      rover2_startingY = move_it_y(index_dire_rover2, rover2_startingY, gridY)
+    end
+    end
+
+end
+
 
 
 
